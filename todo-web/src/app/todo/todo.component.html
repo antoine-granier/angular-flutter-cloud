@@ -1,0 +1,12 @@
+<div class="todo-item">
+  <div class="item">
+    <p-checkbox
+      [binary]="true"
+      [(ngModel)]="todo.completed" 
+      (onChange)="onToggleCompleted()" 
+      [inputId]="todo.id">
+    </p-checkbox>
+    <label [for]="todo.id">{{ todo.title }}</label>
+  </div>
+  <p-button icon="pi pi-trash" severity="danger" (click)="onDelete()"></p-button>
+</div>

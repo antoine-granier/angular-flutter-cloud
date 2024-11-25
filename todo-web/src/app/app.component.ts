@@ -1,13 +1,40 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { InputComponent } from './input/input.component';
+import { TodosListComponent } from './todos-list/todos-list.component';
+import { TodoService } from './todo.service';
+import { SharedModule } from './shared.module';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [SharedModule,InputComponent, TodosListComponent],
+  providers: [TodoService],
 })
 export class AppComponent {
-  title = 'todo-web';
+  todos: any[] = [];
+
+  constructor(private todoService: TodoService) {}
+
+  ngOnInit() {
+    // Charger les tâches depuis Firestore
+    this.todoService.getTodos().subscribe((data) => {
+      console.log(data);
+      
+      this.todos = data;
+    });
+  }
+
+  addTask(title: string) {
+    this.todoService.addTodo(title).then(() => {
+      console.log('Tâche ajoutée!');
+    });
+  }
+
+  deleteTask(id: string) {
+    this.todoService.deleteTodo(id).then(() => {
+      console.log('Tâche supprimée!');
+    });
+  }
 }
