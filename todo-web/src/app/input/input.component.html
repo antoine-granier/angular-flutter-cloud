@@ -1,4 +1,7 @@
-<div>
-  <input [(ngModel)]="taskTitle" placeholder="Ajouter une tâche" />
-  <button (click)="addNewTask()">Ajouter</button>
+<div class="input-container">
+  <span class="p-input-icon-right">
+    <i class="pi pi-plus"></i>
+    <input pInputText [(ngModel)]="taskTitle" placeholder="Ajouter une tâche" />
+  </span>
+  <p-button icon="pi pi-check" (click)="addNewTask()"></p-button>
 </div>

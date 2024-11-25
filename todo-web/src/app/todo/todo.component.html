@@ -1,5 +1,12 @@
 <div class="todo-item">
-  <input type="checkbox" [(ngModel)]="todo.completed" (change)="onToggleCompleted()" />
-  <span [class.completed]="todo.completed">{{ todo.title }}</span>
-  <button (click)="onDelete()">Supprimer</button>
+  <div class="item">
+    <p-checkbox
+      [binary]="true"
+      [(ngModel)]="todo.completed" 
+      (onChange)="onToggleCompleted()" 
+      [inputId]="todo.id">
+    </p-checkbox>
+    <label [for]="todo.id">{{ todo.title }}</label>
+  </div>
+  <p-button icon="pi pi-trash" severity="danger" (click)="onDelete()"></p-button>
 </div>

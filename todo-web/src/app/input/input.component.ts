@@ -1,11 +1,13 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { SharedModule } from '../shared.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports:[SharedModule],
+  imports:[SharedModule,InputTextModule, ButtonModule],
   standalone: true,
 })
 export class InputComponent {

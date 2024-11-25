@@ -1,19 +1,22 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { TodoService } from '../todo.service';
 import { SharedModule } from '../shared.module';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss'],
-  imports:[SharedModule],
+  imports:[SharedModule, CheckboxModule, ButtonModule],
   standalone: true,
 })
 export class TodoComponent {
   @Input() todo!: { id: string; title: string; completed: boolean };
   @Output() deleteTask = new EventEmitter<string>();
 
-  constructor(private todoService: TodoService) {}
+  constructor(private todoService: TodoService) {    
+  }
 
   onDelete() {
     this.deleteTask.emit(this.todo.id);

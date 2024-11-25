@@ -1,7 +1,7 @@
-<div>
+<p-card header="Mes Tâches">
   <app-todo
     *ngFor="let todo of todos"
     [todo]="todo"
     (deleteTask)="onDeleteTask($event)"
   ></app-todo>
-</div>
+</p-card>
