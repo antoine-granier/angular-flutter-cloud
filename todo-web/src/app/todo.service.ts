@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, addDoc, deleteDoc, updateDoc, collectionData, CollectionReference } from '@angular/fire/firestore';
+import { getAuth } from '@angular/fire/auth';
+import { Firestore, collection, doc, addDoc, deleteDoc, updateDoc, collectionData, CollectionReference, DocumentReference, query, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,28 +10,47 @@ export class TodoService {
   private todosCollection: CollectionReference;
 
   constructor(private firestore: Firestore) {
-    // Initialize the collection reference for Firestore
     this.todosCollection = collection(this.firestore, 'todos');
   }
 
-  // Fetch all todos as an observable
   getTodos(): Observable<any[]> {
-    return collectionData(this.todosCollection, { idField: 'id' });
+    const user = localStorage.getItem("user")
+
+    if(!user) {
+      return new Observable<any[]>(observer => {
+        collectionData(this.todosCollection, { idField: 'id' }).subscribe((todos: any[]) => {
+          const todosWithoutUser = todos.filter(todo => !todo.user);
+          observer.next(todosWithoutUser);
+        });
+      });
+    }
+
+    const parsedUser: {email: string; id: string;} = JSON.parse(user)
+    const userRef: DocumentReference = doc(this.firestore, `users/${parsedUser.id}`);
+
+    const todosQuery = query(this.todosCollection, where('user', '==', userRef));
+    return collectionData(todosQuery, { idField: 'id' });
+
   }
 
-  // Add a new todo to the collection
   addTodo(title: string): Promise<any> {
+    const user = localStorage.getItem("user")
     const newTodo = { title, completed: false };
-    return addDoc(this.todosCollection, newTodo);
+
+    if(!user) {
+      return addDoc(this.todosCollection, newTodo);
+    }
+
+    const parsedUser: {email: string; id: string;} = JSON.parse(user)
+    const userRef: DocumentReference = doc(this.firestore, `users/${parsedUser.id}`);
+    return addDoc(this.todosCollection, {...newTodo, user: userRef});
   }
 
-  // Delete a todo by its document ID
   deleteTodo(id: string): Promise<void> {
     const todoDocRef = doc(this.firestore, `todos/${id}`);
     return deleteDoc(todoDocRef);
   }
 
-  // Update the completed status of a todo
   updateTodo(id: string, completed: boolean): Promise<void> {
     const todoDocRef = doc(this.firestore, `todos/${id}`);
     return updateDoc(todoDocRef, { completed });
