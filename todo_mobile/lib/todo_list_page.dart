@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Todo {
   final String id;
@@ -12,7 +13,6 @@ class Todo {
     this.completed = false,
   });
 
-  // Convert Todo to a map for Firestore (sans 'id')
   Map<String, dynamic> toMap() {
     return {
       'title': title,
@@ -20,7 +20,6 @@ class Todo {
     };
   }
 
-  // Create Todo from Firestore map (en utilisant l'ID du document Firestore)
   static Todo fromMap(String id, Map<String, dynamic> map) {
     return Todo(
       id: id,
@@ -90,8 +89,11 @@ class TodoListPage extends StatefulWidget {
 }
 
 class _TodoListPageState extends State<TodoListPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference todosCollection =
       FirebaseFirestore.instance.collection('todos');
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
   List<Todo> todos = [];
 
@@ -101,40 +103,61 @@ class _TodoListPageState extends State<TodoListPage> {
     fetchTodos();
   }
 
-  void fetchTodos() {
-    todosCollection.snapshots().listen((snapshot) {
+  Future<void> fetchTodos() async {
+    final User? user = _auth.currentUser;
+
+    Query query;
+
+    if (user == null) {
+      query = todosCollection.where('user', isNull: true);
+    } else {
+      QuerySnapshot querySnapshot =
+          await usersCollection.where('email', isEqualTo: user.email).get();
+      DocumentReference userRef =
+          usersCollection.doc(querySnapshot.docs.first.id);
+      query = todosCollection.where('user', isEqualTo: userRef);
+    }
+
+    query.snapshots().listen((snapshot) {
       setState(() {
         todos = snapshot.docs
-            .map((doc) => Todo.fromMap(doc.id, doc.data() as Map<String, dynamic>))
+            .map((doc) =>
+                Todo.fromMap(doc.id, doc.data() as Map<String, dynamic>))
             .toList();
       });
     });
   }
 
   void toggleCompleted(Todo todo) {
-    if (todo.id.isEmpty) {
-      print("Erreur : L'ID de la tâche est vide !");
-      return;
-    }
     todosCollection.doc(todo.id).update({'completed': !todo.completed});
   }
 
   void deleteTodo(Todo todo) {
-    if (todo.id.isEmpty) {
-      print("Erreur : L'ID de la tâche est vide !");
-      return;
-    }
     todosCollection.doc(todo.id).delete();
   }
 
-  void addTodo(String title) {
-    final newTodoRef = todosCollection.doc(); // Générez un ID unique pour le document
+  Future<void> addTodo(String title) async {
+    final User? user = _auth.currentUser;
+    final newTodoRef = todosCollection.doc();
+
     final newTodo = Todo(
-      id: newTodoRef.id, // L'ID est utilisé uniquement localement
+      id: newTodoRef.id,
       title: title,
       completed: false,
     );
-    newTodoRef.set(newTodo.toMap()); // Ne stocke pas 'id' dans Firestore
+
+    final todoData = newTodo.toMap();
+    if (user != null) {
+      QuerySnapshot querySnapshot =
+          await usersCollection.where('email', isEqualTo: user.email).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentReference userRef =
+            usersCollection.doc(querySnapshot.docs.first.id);
+        todoData['user'] = userRef;
+      }
+    }
+
+    newTodoRef.set(todoData);
   }
 
   void showAddTodoDialog() {
@@ -147,7 +170,8 @@ class _TodoListPageState extends State<TodoListPage> {
           title: const Text("Nouvelle tâche"),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(hintText: "Entrez le titre de la tâche"),
+            decoration:
+                const InputDecoration(hintText: "Entrez le titre de la tâche"),
           ),
           actions: [
             TextButton(
@@ -171,11 +195,25 @@ class _TodoListPageState extends State<TodoListPage> {
     );
   }
 
+  void logout() async {
+    await _auth.signOut();
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User? user = _auth.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Liste des tâches"),
+        actions: [
+          if (user != null)
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: logout,
+            ),
+        ],
       ),
       body: ListView.builder(
         itemCount: todos.length,
