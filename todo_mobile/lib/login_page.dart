@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       Fluttertoast.showToast(
         msg: 'Bonjour ${_auth.currentUser!.email}',
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP, // Position at bottom
+        gravity: ToastGravity.TOP,
         backgroundColor: Colors.white,
         textColor: Colors.black,
       );
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       Fluttertoast.showToast(
         msg: 'Compte créé. Vous pouvez vous connecter.',
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP, // Position at bottom
+        gravity: ToastGravity.TOP,
         backgroundColor: Colors.white,
         textColor: Colors.black,
       );
