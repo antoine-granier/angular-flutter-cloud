@@ -144,7 +144,7 @@ class _TodoListPageState extends State<TodoListPage> {
     Fluttertoast.showToast(
       msg: !todo.completed ? 'Tâche terminée. Bravo !!' : 'Tâche non terminée.',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // Position at bottom
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.white,
       textColor: Colors.black,
     );
@@ -155,7 +155,7 @@ class _TodoListPageState extends State<TodoListPage> {
     Fluttertoast.showToast(
       msg: 'Tâche supprimée.',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // Position at bottom
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.white,
       textColor: Colors.black,
     );
@@ -166,7 +166,7 @@ class _TodoListPageState extends State<TodoListPage> {
     Fluttertoast.showToast(
       msg: 'Tâche modifiée.',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // Position at bottom
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.white,
       textColor: Colors.black,
     );
@@ -197,7 +197,7 @@ class _TodoListPageState extends State<TodoListPage> {
     Fluttertoast.showToast(
       msg: 'Tâche ajoutée.',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // Position at bottom
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.white,
       textColor: Colors.black,
     );
@@ -278,7 +278,7 @@ class _TodoListPageState extends State<TodoListPage> {
     Fluttertoast.showToast(
       msg: 'Au revoir 👋.',
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // Position at bottom
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.white,
       textColor: Colors.black,
     );
