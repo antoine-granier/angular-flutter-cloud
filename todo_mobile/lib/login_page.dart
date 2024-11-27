@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,6 +24,13 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+      Fluttertoast.showToast(
+        msg: 'Bonjour ${_auth.currentUser!.email}',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP, // Position at bottom
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+      );
       Navigator.pushReplacementNamed(context, '/todos');
     } catch (e) {
       setState(() {
@@ -42,6 +50,13 @@ class _LoginPageState extends State<LoginPage> {
       userData["id"] = newUserRef.id;
       userData["email"] = signUp.user!.email;
       newUserRef.set(userData);
+      Fluttertoast.showToast(
+        msg: 'Compte créé. Vous pouvez vous connecter.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP, // Position at bottom
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+      );
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
