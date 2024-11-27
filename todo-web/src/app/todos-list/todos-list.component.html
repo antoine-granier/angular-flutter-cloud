@@ -3,9 +3,19 @@
     <i class="pi pi-pencil" style="font-size: 1rem"></i>
     Pour modifier, double cliquer sur la tâche
   </p>
-  <app-todo
-    *ngFor="let todo of todos"
-    [todo]="todo"
-    (deleteTask)="onDeleteTask($event)"
-  ></app-todo>
+
+  <p-table [value]="todos" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 10%;">Status</th>
+        <th style="width: 80%;">Tâche</th>
+        <th style="width: 10%;">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-todo>
+      <tr app-todo [todo]="todo" (deleteTask)="onDeleteTask($event)"></tr>
+    </ng-template>
+  </p-table>
 </p-card>
+
+

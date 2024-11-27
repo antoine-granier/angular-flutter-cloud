@@ -1,12 +1,15 @@
-<div class="todo-item">
-  <div class="item">
+  <!-- Checkbox -->
+  <td>
     <p-checkbox
       [binary]="true"
-      [(ngModel)]="todo.completed" 
-      (onChange)="onToggleCompleted()" 
+      [(ngModel)]="todo.completed"
+      (onChange)="onToggleCompleted()"
       [inputId]="todo.id">
     </p-checkbox>
-    
+  </td>
+
+  <!-- Titre avec édition inline -->
+  <td>
     <ng-container *ngIf="isEditing; else viewMode">
       <input
         type="text"
@@ -18,10 +21,15 @@
     </ng-container>
 
     <ng-template #viewMode>
-      <label
-      (dblclick)="enableEdit();">{{ todo.title }}</label>
+      <label (dblclick)="enableEdit()">{{ todo.title }}</label>
     </ng-template>
-  </div>
+  </td>
 
-  <p-button icon="pi pi-trash" severity="danger" (click)="onDelete()"></p-button>
-</div>
+  <!-- Bouton de suppression -->
+  <td>
+    <p-button
+      icon="pi pi-trash"
+      severity="danger"
+      (click)="onDelete()">
+    </p-button>
+  </td>

@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-todo',
+  selector: '[app-todo]',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss'],
   imports: [SharedModule, CheckboxModule, ButtonModule],
