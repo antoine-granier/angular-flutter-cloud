@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Todo } from '../../type/todo';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  todos: any[] = [];
+  todos: Todo[] = [];
 
   constructor(private todoService: TodoService, private authService: AuthService, private router: Router,private toastr: ToastrService) {}
 
