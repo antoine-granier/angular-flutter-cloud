@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Todo {
   final String id;
@@ -140,14 +141,35 @@ class _TodoListPageState extends State<TodoListPage> {
 
   void toggleCompleted(Todo todo) {
     todosCollection.doc(todo.id).update({'completed': !todo.completed});
+    Fluttertoast.showToast(
+      msg: 'Tâche terminée. Bravo !!',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // Position at bottom
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
   }
 
   void deleteTodo(Todo todo) {
     todosCollection.doc(todo.id).delete();
+    Fluttertoast.showToast(
+      msg: 'Tâche supprimée.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // Position at bottom
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
   }
 
   void editTodo(Todo todo, String newTitle) {
     todosCollection.doc(todo.id).update({'title': newTitle});
+    Fluttertoast.showToast(
+      msg: 'Tâche modifiée.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // Position at bottom
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
   }
 
   Future<void> addTodo(String title) async {
@@ -172,6 +194,13 @@ class _TodoListPageState extends State<TodoListPage> {
     }
 
     newTodoRef.set(todoData);
+    Fluttertoast.showToast(
+      msg: 'Tâche ajoutée.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // Position at bottom
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
   }
 
   void showEditTodoDialog(Todo todo) {
@@ -246,6 +275,13 @@ class _TodoListPageState extends State<TodoListPage> {
 
   void logout() async {
     await _auth.signOut();
+    Fluttertoast.showToast(
+      msg: 'Au revoir 👋.',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // Position at bottom
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+    );
     Navigator.pushReplacementNamed(context, '/login');
   }
 
