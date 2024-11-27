@@ -6,7 +6,22 @@
       (onChange)="onToggleCompleted()" 
       [inputId]="todo.id">
     </p-checkbox>
-    <label [for]="todo.id">{{ todo.title }}</label>
+    
+    <ng-container *ngIf="isEditing; else viewMode">
+      <input
+        type="text"
+        [(ngModel)]="todo.title"
+        (blur)="saveEdit()"
+        (keydown.enter)="saveEdit()"
+        class="editable-input"
+      />
+    </ng-container>
+
+    <ng-template #viewMode>
+      <label
+      (dblclick)="enableEdit();">{{ todo.title }}</label>
+    </ng-template>
   </div>
+
   <p-button icon="pi pi-trash" severity="danger" (click)="onDelete()"></p-button>
 </div>
