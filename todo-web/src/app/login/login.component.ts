@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { SharedModule } from '../shared.module';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   isLoading: boolean = false;
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,private toastr: ToastrService) {
     // Initialisation du formulaire
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -34,7 +35,6 @@ export class LoginComponent {
       this.authService
         .signIn(email, password)
         .then(() => {
-          console.log('Connexion réussie');
           this.errorMessage = '';
           this.isLoading = false;
         })
@@ -42,6 +42,7 @@ export class LoginComponent {
           console.error(err);
           this.isLoading = false;
           this.errorMessage = 'Erreur lors de la connexion. Vérifiez vos informations.';
+          this.toastr.error('Erreur', this.errorMessage);
         });
     }
   }
@@ -53,12 +54,12 @@ export class LoginComponent {
       this.authService
         .signUp(email, password)
         .then(() => {
-          console.log('Inscription réussie');
           this.errorMessage = '';
         })
         .catch((err) => {
           console.error(err);
           this.errorMessage = 'Erreur lors de l’inscription.';
+          this.toastr.error('Erreur', this.errorMessage);
         });
     }
   }

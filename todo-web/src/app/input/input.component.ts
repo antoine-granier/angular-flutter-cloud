@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-input',
@@ -18,7 +19,7 @@ export class InputComponent {
   addNewTask() {
     if (this.taskTitle.trim()) {
       this.addTask.emit(this.taskTitle);
-      this.taskTitle = ''; // Réinitialise l’input
+      this.taskTitle = ''; 
     }
   }
 }

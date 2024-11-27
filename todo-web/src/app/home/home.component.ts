@@ -6,6 +6,7 @@ import { SharedModule } from '../shared.module';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { Router } from '@angular/router';
 export class HomeComponent {
   todos: any[] = [];
 
-  constructor(private todoService: TodoService, private authService: AuthService, private router: Router) {}
+  constructor(private todoService: TodoService, private authService: AuthService, private router: Router,private toastr: ToastrService) {}
 
   ngOnInit() {
     this.todoService.getTodos().subscribe((data) => {
@@ -41,13 +42,13 @@ export class HomeComponent {
 
   addTask(title: string) {
     this.todoService.addTodo(title).then(() => {
-      console.log('Tâche ajoutée!');
+      this.toastr.success('Tâche ajoutée', "Succès")
     });
   }
 
   deleteTask(id: string) {
     this.todoService.deleteTodo(id).then(() => {
-      console.log('Tâche supprimée!');
+      this.toastr.success('Tâche supprimée', "Succès")
     });
   }
 }
