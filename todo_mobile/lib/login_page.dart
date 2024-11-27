@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,6 +13,8 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
   String errorMessage = '';
 
   Future<void> login() async {
@@ -21,6 +24,24 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text.trim(),
       );
       Navigator.pushReplacementNamed(context, '/todos');
+    } catch (e) {
+      setState(() {
+        errorMessage = e.toString();
+      });
+    }
+  }
+
+  Future<void> signUp() async {
+    try {
+      var signUp = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      final newUserRef = usersCollection.doc();
+      final Map<String, dynamic> userData = {};
+      userData["id"] = newUserRef.id;
+      userData["email"] = signUp.user!.email;
+      newUserRef.set(userData);
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
@@ -49,10 +70,16 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: login,
-              child: const Text("Se connecter"),
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              ElevatedButton(
+                onPressed: login,
+                child: const Text("Connexion"),
+              ),
+              ElevatedButton(
+                onPressed: signUp,
+                child: const Text("Inscription"),
+              ),
+            ]),
             if (errorMessage.isNotEmpty)
               Text(
                 errorMessage,
