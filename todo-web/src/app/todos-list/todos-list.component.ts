@@ -18,4 +18,8 @@ export class TodosListComponent {
   onDeleteTask(id: string) {
     this.deleteTask.emit(id);
   }
+
+  getUser(){
+    return JSON.parse(localStorage.getItem('user')??'')?.email;
+  }
 }
