@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { TableModule } from 'primeng/table';
 import { TodoComponent } from '../todo/todo.component';
 import { SharedModule } from '../shared.module';
 import { CardModule } from 'primeng/card';
@@ -9,7 +9,7 @@ import { CardModule } from 'primeng/card';
   templateUrl: './todos-list.component.html',
   styleUrls: ['./todos-list.component.scss'],
   standalone: true,
-  imports: [SharedModule, TodoComponent, CardModule],
+  imports: [SharedModule, TodoComponent, CardModule,TableModule],
 })
 export class TodosListComponent {
   @Input() todos: any[] = [];

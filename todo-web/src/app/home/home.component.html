@@ -4,5 +4,6 @@
     <p-button *ngIf="checkUserConnected()" (onClick)="logout()" >Se déconnecter</p-button>
   </div>
   <app-input (addTask)="addTask($event)"></app-input>
+
   <app-todos-list [todos]="todos" (deleteTask)="deleteTask($event)"></app-todos-list>
 </div>

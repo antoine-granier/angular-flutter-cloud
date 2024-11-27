@@ -3,3 +3,29 @@
     gap: 5px;
     justify-content: center;
   }
+
+  .editable-input {
+    border: 1px solid #ccc;
+    padding: 4px;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  label {
+    cursor: pointer;
+  }
+  
+  label:hover {
+    text-decoration: underline;
+  }
+  
+  p-table {
+    width: 100%;
+    margin-top: 16px;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+  
+  

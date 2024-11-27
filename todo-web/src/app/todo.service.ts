@@ -51,8 +51,15 @@ export class TodoService {
     return deleteDoc(todoDocRef);
   }
 
-  updateTodo(id: string, completed: boolean): Promise<void> {
+  updateTodo(id: string, completed: boolean, title?: string): Promise<void> {
     const todoDocRef = doc(this.firestore, `todos/${id}`);
-    return updateDoc(todoDocRef, { completed });
+    
+    const updateData: any = { completed };
+    if (title !== undefined) {
+      updateData.title = title;
+    }
+  
+    return updateDoc(todoDocRef, updateData);
   }
+  
 }
