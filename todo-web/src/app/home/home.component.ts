@@ -32,6 +32,7 @@ export class HomeComponent {
 
   logout() {
     this.authService.signOut()
+    this.router.navigate(["login"])
   }
 
   login(): void {

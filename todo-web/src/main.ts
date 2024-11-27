@@ -12,6 +12,7 @@ import { provideRouter } from '@angular/router';
 import { LoginComponent } from './app/login/login.component';
 import { HomeComponent } from './app/home/home.component';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { authGuard } from './app/auth.guard';
 
 bootstrapApplication(AppComponent, {   
   providers: [     
@@ -20,7 +21,7 @@ bootstrapApplication(AppComponent, {
     provideAuth(() => getAuth()),     
     provideRouter([       
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent },     
+      { path: 'home', component: HomeComponent, canActivate: [authGuard] },     
       { path: 'login', component: LoginComponent },     
     ]),
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
