@@ -33,12 +33,14 @@ class TodoItem extends StatelessWidget {
   final Todo todo;
   final Function(Todo) onToggleCompleted;
   final Function(Todo) onDelete;
+  final Function(Todo) onUpdate;
 
   const TodoItem({
     Key? key,
     required this.todo,
     required this.onToggleCompleted,
     required this.onDelete,
+    required this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -70,10 +72,18 @@ class TodoItem extends StatelessWidget {
                 ),
               ],
             ),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: () => onDelete(todo),
-            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.blue),
+                  onPressed: () => onUpdate(todo),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () => onDelete(todo),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -136,6 +146,10 @@ class _TodoListPageState extends State<TodoListPage> {
     todosCollection.doc(todo.id).delete();
   }
 
+  void editTodo(Todo todo, String newTitle) {
+    todosCollection.doc(todo.id).update({'title': newTitle});
+  }
+
   Future<void> addTodo(String title) async {
     final User? user = _auth.currentUser;
     final newTodoRef = todosCollection.doc();
@@ -158,6 +172,41 @@ class _TodoListPageState extends State<TodoListPage> {
     }
 
     newTodoRef.set(todoData);
+  }
+
+  void showEditTodoDialog(Todo todo) {
+    TextEditingController controller = TextEditingController(text: todo.title);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Modifier la tâche"),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+                hintText: "Modifiez le titre de la tâche"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Annuler"),
+            ),
+            TextButton(
+              onPressed: () {
+                if (controller.text.trim().isNotEmpty) {
+                  editTodo(todo, controller.text.trim());
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text("Enregistrer"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void showAddTodoDialog() {
@@ -222,6 +271,7 @@ class _TodoListPageState extends State<TodoListPage> {
             todo: todos[index],
             onToggleCompleted: toggleCompleted,
             onDelete: deleteTodo,
+            onUpdate: showEditTodoDialog,
           );
         },
       ),
