@@ -142,7 +142,7 @@ class _TodoListPageState extends State<TodoListPage> {
   void toggleCompleted(Todo todo) {
     todosCollection.doc(todo.id).update({'completed': !todo.completed});
     Fluttertoast.showToast(
-      msg: 'Tâche terminée. Bravo !!',
+      msg: !todo.completed ? 'Tâche terminée. Bravo !!' : 'Tâche non terminée.',
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP, // Position at bottom
       backgroundColor: Colors.white,
