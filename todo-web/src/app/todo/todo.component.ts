@@ -4,6 +4,7 @@ import { SharedModule } from '../shared.module';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { ToastrService } from 'ngx-toastr';
+import { Todo } from '../../type/todo';
 
 @Component({
   selector: '[app-todo]',
@@ -13,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   standalone: true,
 })
 export class TodoComponent {
-  @Input() todo!: { id: string; title: string; completed: boolean };
+  @Input() todo!: Todo;
   @Output() deleteTask = new EventEmitter<string>();
 
   isEditing = false;
