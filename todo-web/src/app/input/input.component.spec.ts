@@ -1,8 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputComponent } from './input.component';
-import { SharedModule } from '../shared.module';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
 import { By } from '@angular/platform-browser';
 
 describe('InputComponent', () => {
@@ -11,8 +8,7 @@ describe('InputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, InputTextModule, ButtonModule],
-      declarations: [InputComponent],
+      imports: [InputComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InputComponent);

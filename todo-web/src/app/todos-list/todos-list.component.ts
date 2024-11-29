@@ -10,17 +10,25 @@ import { User } from '../../type/user';
   templateUrl: './todos-list.component.html',
   styleUrls: ['./todos-list.component.scss'],
   standalone: true,
-  imports: [SharedModule, TodoComponent, CardModule,TableModule],
+  imports: [SharedModule, TodoComponent, CardModule, TableModule],
 })
 export class TodosListComponent {
   @Input() todos: any[] = [];
   @Output() deleteTask = new EventEmitter<string>();
 
-  onDeleteTask(id: string):void {
+  onDeleteTask(id: string): void {
     this.deleteTask.emit(id);
   }
 
-  getUser():string{
-    return (JSON.parse(localStorage.getItem('user')??'') as User)?.email;
+  getUser(): string | undefined {
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        return (JSON.parse(user) as User)?.email;
+      } catch {
+        console.error('Invalid user data in localStorage');
+      }
+    }
+    return undefined;
   }
 }

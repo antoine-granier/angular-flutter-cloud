@@ -19,7 +19,7 @@ export class TodoComponent {
 
   isEditing = false;
 
-  constructor(private todoService: TodoService,private toastr: ToastrService) {}
+  constructor(private todoService: TodoService, private toastr: ToastrService) {}
 
   onDelete() {
     this.deleteTask.emit(this.todo.id);
@@ -43,10 +43,11 @@ export class TodoComponent {
     this.isEditing = false;
     this.todoService.updateTodo(this.todo.id, this.todo.completed, this.todo.title)
       .then(() => {
-        this.toastr.success('Tâche mise à jour', "Succès")
+        this.toastr.success('Tâche mise à jour', 'Succès');
       })
-      .catch(error => {
-        this.toastr.error('Erreur lors de la mise à jour de la tâche', "Erreur")
+      .catch((error) => {
+        console.error('Erreur lors de la mise à jour de la tâche:', error);
+        this.toastr.error('Erreur lors de la mise à jour de la tâche', 'Erreur');
       });
   }
 }

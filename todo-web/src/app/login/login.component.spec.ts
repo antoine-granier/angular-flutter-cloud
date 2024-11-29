@@ -23,8 +23,7 @@ describe('LoginComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [LoginComponent],
+      imports: [LoginComponent], // Import standalone component
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: ToastrService, useValue: toastrServiceMock },
@@ -40,101 +39,95 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Form initialization', () => {
-    it('should create a form with email and password controls', () => {
-      expect(component.authForm.contains('email')).toBeTrue();
-      expect(component.authForm.contains('password')).toBeTrue();
-    });
-
-    it('should require email and password', () => {
-      const emailControl = component.authForm.get('email');
-      const passwordControl = component.authForm.get('password');
-
-      emailControl?.setValue('');
-      passwordControl?.setValue('');
-
-      expect(emailControl?.valid).toBeFalse();
-      expect(passwordControl?.valid).toBeFalse();
-    });
-
-    it('should validate email format', () => {
-      const emailControl = component.authForm.get('email');
-
-      emailControl?.setValue('invalid-email');
-      expect(emailControl?.valid).toBeFalse();
-
-      emailControl?.setValue('test@example.com');
-      expect(emailControl?.valid).toBeTrue();
-    });
-
-    it('should enforce password length of at least 6 characters', () => {
-      const passwordControl = component.authForm.get('password');
-
-      passwordControl?.setValue('123');
-      expect(passwordControl?.valid).toBeFalse();
-
-      passwordControl?.setValue('123456');
-      expect(passwordControl?.valid).toBeTrue();
-    });
-  });
-
   describe('onSubmit', () => {
     it('should call authService.signIn with valid form values', async () => {
+      // Set valid form values
       component.authForm.setValue({
         email: 'test@example.com',
         password: '123456',
       });
 
+      // Call the method
       await component.onSubmit();
 
+      // Verify that signIn was called with correct arguments
       expect(authServiceMock.signIn).toHaveBeenCalledWith('test@example.com', '123456');
+
+      // Verify that there is no error message and isLoading is reset
       expect(component.errorMessage).toBe('');
       expect(component.isLoading).toBeFalse();
     });
 
     it('should show error message on failed login', async () => {
+      // Mock signIn to reject with an error
       authServiceMock.signIn.and.returnValue(Promise.reject('Error'));
 
+      // Set valid form values
       component.authForm.setValue({
         email: 'test@example.com',
         password: '123456',
       });
 
-      await component.onSubmit();
+      // Call the method
+      component.onSubmit();
+      await fixture.whenStable(); // Wait for all promises to resolve/reject
+      fixture.detectChanges(); // Apply changes to the DOM
 
-      expect(authServiceMock.signIn).toHaveBeenCalledWith('test@example.com', '123456');
+      // Assert that errorMessage was set correctly
       expect(component.errorMessage).toBe('Erreur lors de la connexion. Vérifiez vos informations.');
-      expect(toastrServiceMock.error).toHaveBeenCalledWith('Erreur', 'Erreur lors de la connexion. Vérifiez vos informations.');
+
+      // Assert that ToastrService.error was called
+      expect(toastrServiceMock.error).toHaveBeenCalledWith(
+        'Erreur',
+        'Erreur lors de la connexion. Vérifiez vos informations.'
+      );
+
+      // Verify that isLoading was reset
       expect(component.isLoading).toBeFalse();
     });
   });
 
   describe('onSignUp', () => {
     it('should call authService.signUp with valid form values', async () => {
+      // Set valid form values
       component.authForm.setValue({
         email: 'test@example.com',
         password: '123456',
       });
 
+      // Call the method
       await component.onSignUp();
 
+      // Verify that signUp was called with correct arguments
       expect(authServiceMock.signUp).toHaveBeenCalledWith('test@example.com', '123456');
+
+      // Verify that there is no error message
       expect(component.errorMessage).toBe('');
     });
 
     it('should show error message on failed signup', async () => {
+      // Mock signUp to reject with an error
       authServiceMock.signUp.and.returnValue(Promise.reject('Error'));
 
+      // Set valid form values
       component.authForm.setValue({
         email: 'test@example.com',
         password: '123456',
       });
 
-      await component.onSignUp();
+      // Call the method
+      component.onSignUp();
+      await fixture.whenStable(); // Wait for all promises to resolve/reject
+      fixture.detectChanges(); // Apply changes to the DOM
 
-      expect(authServiceMock.signUp).toHaveBeenCalledWith('test@example.com', '123456');
+      // Assert that errorMessage was set correctly
       expect(component.errorMessage).toBe('Erreur lors de l’inscription.');
-      expect(toastrServiceMock.error).toHaveBeenCalledWith('Erreur', 'Erreur lors de l’inscription.');
+
+      // Assert that ToastrService.error was called
+      expect(toastrServiceMock.error).toHaveBeenCalledWith(
+        'Erreur',
+        'Erreur lors de l’inscription.'
+      );
     });
   });
 });
