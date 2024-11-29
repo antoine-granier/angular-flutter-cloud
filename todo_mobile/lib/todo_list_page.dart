@@ -48,6 +48,7 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -107,6 +108,7 @@ class _TodoListPageState extends State<TodoListPage> {
       FirebaseFirestore.instance.collection('users');
 
   List<Todo> todos = [];
+  String searchTerm = "";
 
   @override
   void initState() {
@@ -210,6 +212,7 @@ class _TodoListPageState extends State<TodoListPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Modifier la tâche"),
           content: TextField(
             controller: controller,
@@ -245,6 +248,7 @@ class _TodoListPageState extends State<TodoListPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Nouvelle tâche"),
           content: TextField(
             controller: controller,
@@ -285,12 +289,23 @@ class _TodoListPageState extends State<TodoListPage> {
     Navigator.pushReplacementNamed(context, '/login');
   }
 
+  List<Todo> get filteredTodos {
+    if (searchTerm.isEmpty) {
+      return todos;
+    }
+    return todos
+        .where((todo) =>
+            todo.title.toLowerCase().contains(searchTerm.toLowerCase()))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("Liste des tâches"),
         actions: [
           if (user != null)
@@ -300,20 +315,49 @@ class _TodoListPageState extends State<TodoListPage> {
             ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          return TodoItem(
-            todo: todos[index],
-            onToggleCompleted: toggleCompleted,
-            onDelete: deleteTodo,
-            onUpdate: showEditTodoDialog,
-          );
-        },
+      body: Column(
+        children: [
+          // Barre de recherche
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchTerm = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: "Rechercher une tâche...",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ),
+          // Liste des tâches
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredTodos.length,
+              itemBuilder: (context, index) {
+                return TodoItem(
+                  todo: filteredTodos[index],
+                  onToggleCompleted: toggleCompleted,
+                  onDelete: deleteTodo,
+                  onUpdate: showEditTodoDialog,
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: showAddTodoDialog,
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

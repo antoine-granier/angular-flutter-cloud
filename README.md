@@ -14,3 +14,4 @@ Groupe : DERENSY Dany, GRANIER Antoine
   - Modification
 - Modification du titre d'une tâche
 - Possibilité de terminé une tâche et de la passer en non terminé
+- Recherche sur le titre des tâches
