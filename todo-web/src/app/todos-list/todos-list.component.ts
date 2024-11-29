@@ -15,6 +15,14 @@ import { User } from '../../type/user';
 export class TodosListComponent {
   @Input() todos: any[] = [];
   @Output() deleteTask = new EventEmitter<string>();
+  searchTerm: string = '';
+
+  get filteredTodos(): any[] {
+    return this.todos.filter(todo =>
+      todo.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
 
   onDeleteTask(id: string): void {
     this.deleteTask.emit(id);
@@ -31,4 +39,5 @@ export class TodosListComponent {
     }
     return undefined;
   }
+
 }
