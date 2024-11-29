@@ -69,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Connexion"),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -88,10 +89,16 @@ class _LoginPageState extends State<LoginPage> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               ElevatedButton(
                 onPressed: login,
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                ),
                 child: const Text("Connexion"),
               ),
               ElevatedButton(
                 onPressed: signUp,
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                ),
                 child: const Text("Inscription"),
               ),
             ]),

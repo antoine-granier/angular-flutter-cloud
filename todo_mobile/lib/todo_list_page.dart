@@ -48,6 +48,7 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -211,6 +212,7 @@ class _TodoListPageState extends State<TodoListPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Modifier la tâche"),
           content: TextField(
             controller: controller,
@@ -246,6 +248,7 @@ class _TodoListPageState extends State<TodoListPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Nouvelle tâche"),
           content: TextField(
             controller: controller,
@@ -302,6 +305,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text("Liste des tâches"),
         actions: [
           if (user != null)
@@ -348,8 +352,12 @@ class _TodoListPageState extends State<TodoListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: showAddTodoDialog,
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
