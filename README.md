@@ -15,3 +15,10 @@ Groupe : DERENSY Dany, GRANIER Antoine
 - Modification du titre d'une tâche
 - Possibilité de terminé une tâche et de la passer en non terminé
 - Recherche sur le titre des tâches
+
+## Login
+mail: admin@mail.com 
+mot de passe : admin123
+
+mail: test@gmail.com
+mot de passe: test123
