@@ -22,3 +22,12 @@ mot de passe : admin123
 
 mail: test@gmail.com
 mot de passe: test123
+
+## Lancement
+
+Android & IOS : 
+- flutter run
+- Android : minSDK 23
+- IOS : platform 13.0
+
+Angular : ng serve
