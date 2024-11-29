@@ -10,17 +10,25 @@ import { User } from '../../type/user';
   templateUrl: './todos-list.component.html',
   styleUrls: ['./todos-list.component.scss'],
   standalone: true,
-  imports: [SharedModule, TodoComponent, CardModule,TableModule],
+  imports: [SharedModule, TodoComponent, CardModule, TableModule],
 })
 export class TodosListComponent {
   @Input() todos: any[] = [];
   @Output() deleteTask = new EventEmitter<string>();
 
-  onDeleteTask(id: string):void {
+  searchTerm: string = '';
+
+  get filteredTodos(): any[] {
+    return this.todos.filter(todo =>
+      todo.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  onDeleteTask(id: string): void {
     this.deleteTask.emit(id);
   }
 
-  getUser():string{
-    return (JSON.parse(localStorage.getItem('user')??'') as User)?.email;
+  getUser(): string {
+    return (JSON.parse(localStorage.getItem('user') ?? '') as User)?.email;
   }
 }

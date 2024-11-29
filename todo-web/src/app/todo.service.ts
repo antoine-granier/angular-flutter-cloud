@@ -33,7 +33,7 @@ export class TodoService {
 
   }
 
-  addTodo(title: string): Promise<any> {
+  addTodo(title: string) {
     const user = localStorage.getItem("user")
     const newTodo = { title, completed: false };
 
@@ -46,12 +46,12 @@ export class TodoService {
     return addDoc(this.todosCollection, {...newTodo, user: userRef});
   }
 
-  deleteTodo(id: string): Promise<void> {
+  deleteTodo(id: string) {
     const todoDocRef = doc(this.firestore, `todos/${id}`);
     return deleteDoc(todoDocRef);
   }
 
-  updateTodo(id: string, completed: boolean, title?: string): Promise<void> {
+  updateTodo(id: string, completed: boolean, title?: string) {
     const todoDocRef = doc(this.firestore, `todos/${id}`);
     
     const updateData: any = { completed };

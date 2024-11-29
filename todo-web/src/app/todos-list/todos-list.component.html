@@ -1,10 +1,19 @@
 <p-card [header]="'Tâche(s) de ' + getUser()">
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Rechercher une tâche..."
+      [(ngModel)]="searchTerm"
+      class="p-inputtext p-component"
+      style="width: 100%; margin-bottom: 1rem;"
+    />
+  </div>
   <p>
     <i class="pi pi-pencil" style="font-size: 1rem"></i>
     Pour modifier, double cliquer sur la tâche
   </p>
 
-  <p-table [value]="todos" [responsiveLayout]="'scroll'">
+  <p-table [value]="filteredTodos" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 10%;">Status</th>
